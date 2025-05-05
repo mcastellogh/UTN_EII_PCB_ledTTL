@@ -24,6 +24,7 @@ void App_setup(void){
     pinMode(LED3_PIN,OUTPUT);
 
     welcome();
+    FSM_led_init(30,700);
 
     //--Presentation
     Serial.printf("\r\nCátedra de Electrónica II UTN-FRRO\r\n");

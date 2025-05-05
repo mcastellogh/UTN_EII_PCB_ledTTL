@@ -41,5 +41,6 @@ uint16_t led_delay=200;
 
 //--Functions
 void App_loop(void){
-    blink_led(led_delay,LED1_PIN);
+    //blink_led(led_delay,LED1_PIN);
+    FSM_led(LED1_PIN);
 }
