@@ -1,0 +1,42 @@
+1.0.0 Versión inicial
+- Set trig pulse to 200 uS
+- Add init to SR04 (set echo pin output, set low during 1 sec, then set to input)
+- Add standard deviation
+
+2.0.0 
+- FEAT(measures): se agrega una estructura para almacenar las variables medidas. Ahora las variables están definidas en la estructura 'Data'. Para agregar variables, seguir el siguiente ejemplo:
+Data data[] = {
+    //name,         variable, raw_value, inst_value, ave_value, sd_value, max_value, min_value, pin, procesed, range
+    "Nivel",        LEVEL,      0, 0, 0, 0, 0, 0,   SR04_ECHO_PIN,  0,0,
+    "Volumen",      VOL,        0, 0, 0, 0, 0, 0,   SR04_ECHO_PIN,  0,0,
+    "Temperatura",  TEMP_AMB,   0, 0, 0, 0, 0, 0,   A0,             0,0
+};
+Se estructura la formación de un registro para cada variables que consta de: valor promedio, máximo, mínimo y desvío standard. El firmware publicará estas los registros de estas variables cuando
+termine el período de registro (fijado en la macro MAX_SEC_AVE_AN en meaasures.h).
+Se modifica la función de publicación (ahora publish_measures()) para que envíe las telemetrías de los registros de cada variable. Ahora los registros de las variables se nombrarán con los sufijos harcodeados "_sd", "_min", "_max" 
+y se publicarán con el nombre correspondiente. 
+Ejemplo para la variable 'Temperatura'.
+Registro de 'Temperatura':
+Temperatura: temperatura promedio.
+Temperatura_sd: desvío standard de temperatura, calculado en el tiempo de registro.
+Temperatura_min: mínimo valor de temperatura, calculado en el tiempo de registro. 
+Temperatura_max: máximo valor de temperatura, calculado en el tiempo de registro. 
+- REF:(sr04): se cambia la función de lectura del sr04, ahora se usa la función pulseIn() para medir el tiempo de eco. Se deberá ajustar el delay del trigger en _sr04_getEchoTime() para cada hardware en particular.
+Experiencias anteriores dan como resultado valores de 10 us o 200 us.
+- FEAT: se agrega ROMR reset por máximo intentos de reconexiones al broker. La variable _romr en la clase MCC_mqtt está harcodeada en 1 para que siempre esté activa esta opción. La macro MAX_RECONN está en 5, esto resulta en un período de reset de 
+ aproximadamente 15 minutos.
+
+
+5.0.0
+
+- Variables de conexion en NVS 
+- Estructura para Comandos
+- Estructura para atributos 
+- Comandos get/set 
+- Configurador serial 
+- Array de variables 
+- Salud del file system (fs_health)
+- Comando id (rpc_id)
+- Configuracion de t_sample y t_reg
+- Sincronizacion de la publicacion con RTC
+
